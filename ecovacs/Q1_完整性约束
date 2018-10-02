@@ -1,0 +1,240 @@
+https://zhidao.baidu.com/question/177979199.html
+数据库完整性约束可分为6类：列级静态约束、元组级静态约束、关系级静态约束、列级动态约束、元组级动态约束、关系级动态约束。动态约束通常由应用软件来实现。不同DBMS支持的数据库完整性基本相同。
+
+https://baike.baidu.com/item/%E6%95%B0%E6%8D%AE%E5%AE%8C%E6%95%B4%E6%80%A7%E7%BA%A6%E6%9D%9F/10256513?fr=aladdin
+百度首页 极限潜水员 消息 商城 网页 新闻 贴吧 知道 音乐 图片 视频 地图 文库 百科
+  
+
+数据完整性约束
+进入词条全站搜索帮助
+声明：百科词条人人可编辑，词条创建和修改均免费，绝不存在官方及代理商付费代编，请勿上当受骗。详情>>
+首页
+历史上的今天
+百科冷知识
+图解百科
+分类
+艺术科学自然文化地理生活社会人物经济体育历史
+特色百科
+数字博物馆
+非遗百科
+多肉百科
+恐龙百科
+城市百科
+二战百科
+用户
+蝌蚪团
+燃梦计划
+百科任务
+百科商城
+权威合作
+合作模式
+常见问题
+联系方式
+手机百科
+网页版
+个人中心
+收藏 36
+6
+数据完整性约束 编辑
+数据完整性约束指的是为了防止不符合规范的数据进入数据库，在用户对数据进行插入、修改、删除等操作时，DBMS自动按照一定的约束条件对数据进行监测，使不符合规范的数据不能进入数据库，以确保数据库中存储的数据正确、有效、相容。
+中文名 数据完整性约束 外文名 Data Integrity Constraints 功    能 防止不符合规范的数据进入数据库 要    求 按照一定的约束条件 主    体 DBMS
+目录
+1 定义
+2 数据完整性约束：
+定义编辑
+该词为计算机学科数据库技术术语
+数据完整性约束是一组完整性规则的集合。它定义了数据模型必须遵守的语义约束，也规定了根据数据模型所构建的数据库中数据内部及其数据相互间联系所必须满足的语义约束。
+完整性约束是数据库系统必须遵守的约束，他限定了根据数据模型所构建的数据库的状态以及状态变化，以便维护数据库中数据的正确性、有效性和相容性。
+数据完整性约束：编辑
+1 数据的完整性
+约束是用来确保数据的准确性和一致性。数据的完整性就是对数据的准确性和一致性的一种保证。
+数据完整性(Data Integrity)是指数据的精确(Accuracy)和可靠性(Reliability)。
+分为以下四类：
+1) 实体完整性：规定表的每一行在表中是惟一的实体。
+2) 域完整性：是指表中的列必须满足某种特定的数据类型约束，其中约束又包括取值范围、精度等规定。
+3) 参照完整性：是指两个表的主关键字和外关键字的数据应一致，保证了表之间的数据的一致性，防止了数据丢失或无意义的数据在数据库中扩散。
+4) 用户定义的完整性：不同的关系数据库系统根据其应用环境的不同，往往还需要一些特殊的约束条件。用户定义的完整性即是针对某个特定关系数据库的约束条件，它反映某一具体应用必须满足的语义要求。
+2 完整性约束的类型：
+可分为三种类型：与表有关的约束、域(Domain)约束、断言(Assertion)
+1) 与表有关的约束:是表中定义的一种约束。可在列定义时定义该约束，此时称为列约束，也可以在表定义时定义约束，此时称为表约束。
+2) 域(Domain)约束：在域定义中被定义的一种约束，它与在特定域中定义的任何列都有关系。
+3) 断言(Assertion)：在断言定义时定义的一种约束，它可以与一个或多个表进行关联。
+一、 与表有关的约束：包括列约束(表约束+NOT NULL)和表约束(PRIMARY KEY、foreign key、check、UNIQUE) 。
+(1) not null（非空)约束： 只用于定义列约束。
+语法如下：
+Colunm_name datatype | domain not null
+实例：
+create table Employee
+(
+emp_id int not null,
+emp_name varchar(10) not null,
+address varchar(40) ,
+)
+创建之后，如果往表Employee表中非空约束中插入空值，insert into Employee values(1,null,'neimeng')将会出错。如下：
+Msg 515, Level 16, State 2, Line 1
+Cannot insert the value NULL into column 'emp_name', table 'Student.dbo.Employee';
+column does not allow nulls. INSERT fails.
+The statement has been terminated.
+(2) unique(惟一)约束：用于指明创建惟一约束的列上的取值必须惟一。
+语法如下：
+Colunm_name datatype | domain unique
+实例：
+create table EmployeeInfo
+(
+emp_id int not null,
+emp_name varchar(10) not null,
+phone char(11) unique,
+address varchar(40) ,
+)
+如下往EmployeeInfo插入数据时，如果两条记录的phone不惟一，
+insert into EmployeeInfo values(1,'abcdwxc','neimeng','13612345678')
+insert into EmployeeInfo values(2,'terry','neimeng','13612345678')
+则会出现错误。如下：
+(1 row(s) affected)
+Msg 2627, Level 14, State 1, Line 2
+Violation of UNIQUE KEY constraint 'UQ__EmployeeInfo__060DEAE8'. Cannot insert duplicate key in object 'dbo.EmployeeInfo'.
+The statement has been terminated.
+除了在定义列时添加unique约束外，也可以将unique约束作为表约束添加。即把它作为表定义的元素。
+语法如下：
+[CONSTRAINT constraint_name] unique (column1,column2,.....)
+实例：
+create table EmployeeInfo
+(
+emp_id int not null,
+emp_name varchar(10) not null,
+phone char(11)
+address varchar(40) ,
+constraint p_uniq unique(phone)
+)
+(3) primary key(主键)约束：用于定义基本表的主键，起惟一标识作用，其值不能为null,也不能重复，以此来保证实体的完整性。
+语法如下：
+Colunm_name datatype | domain primary key
+实例：
+drop table EmployeeInfo
+create table EmployeeInfo
+(
+emp_id int primary key,
+emp_name varchar(10) not null,
+phone char(11),
+address varchar(40) ,
+)
+如果向EmployeeInfo表插入的emp_id重复了或者插入时emp_id为null值，则会出错。
+可以在创建表时，创建主键约束，也可创建表完成以后，创建主键，例如：
+alter table EmployeeInfo
+add constraint e_prim primary key(emp_id)
+primary key 与 unique的区别：
+1.在一个表中，只能定义一个primary key约束，但可定义多个unique约束。
+2.对于指定为primary key的一个列或多个列的组合，其中任何一个列都不能出现空值，而对于unique所约束的惟一键，则允许为null,只是null值最多有一个。
+(4) foreign key(外键)约束：定义了一个表中数据与另一个表中的数据的联系。
+foreign key约束指定某一个列或一组列作为外部键，其中包含外部键的表称为子表，包含外部键所引用的主键的表称为父表。系统保证，表在外部键上的取值要么是父表中某一主键，要么取空值，以此保证两个表之间的连接，确保了实体的参照完整性。
+语法如下：
+Colunm_name datetype | domain references table_name(column)
+[match full|partial|simple] //注：sqlserver不支持。
+[referential triggered action]
+说明：table_name为父表的表名，column为父表中与外键对应的主键值。
+[match full|partial|simple]为可选子句，用于设置如何处理外键中的null值。
+[referential triggered action]也为可选子句，用于设置更新、删除外键列时的操作准则。
+可以为表的一列或多列创建foreign key 约束，如果为多列创建 foreign key约束，将分别与主表中的相应主键相对应。
+实例：
+create table EmployeeInfo
+(
+emp_id int primary key,
+emp_name varchar(10) not null,
+account char(4) primary key,
+phone char(11)
+address varchar(40) ,
+)
+create table Emp_Sal
+(
+emp_id int , account CHAR(4) ,salary DECIMAL(5,1),
+CONSTRAINT E_SAL FOREIGN KEY(emp_id,account) REFERENCES EmployeeInfo (emp_id,account))
+)
+也可以表创建以后添加到表上。如下：
+create table Emp_Sal
+(
+emp_id int ,emp_name varchar(10) not null, account CHAR(4) ,salary DECIMAL(5,1),
+)
+alter table Emp_Sal
+add CONSTRAINT E_SAL FOREIGN KEY(emp_id,account) REFERENCES EmployeeInfo (emp_id,account)
+该外键的作用：确保表Emp_Sal的每个emp_id列都对应表EmployeeInfo中相应的emp_id。此时，表EmployeeInfo为父表，而表Emp_Sal为子表。子表的emp_id列参照父表的emp_id列。
+如果想在子表的emp_id列插入一个值，首先父表的emp_id列必须存在，否则会插入失败。如果想从父表的emp_id删除一个值，则必须无删除子表emp_id列中所有与之对应的值。
+(注:foreign key 列上的取值可以取null)。
+潜在问题：由于foreign key列上可以取空值,DBMS将跳过对foreign key约束的检查，因此如果插入Emp_Sal如下数据：
+insert into Emp_Sal values(6,null,null) 则插入到Emp_Sal中，但其主表的相关列却不存在。
+解决办法：
+（1）将联合外键的列添加not null约束，但这限制了用户的部分操作。
+（2）采用Match子句。(sqlserver不支持).
+更新、删除操作规则：
+在删除或更新有primary key值的行，且该值与子表的foreign key中一个或多个值相匹配时，会引起匹配完整性的丧失。
+在foreign key创建语法中，提供了可选的on update和on delete子句，也就是上面的[referential triggered action]。可用此保持引用完整性。
+on update / on delete
+no action|cascade|restrict|set null|set default
+no action:更新或删除父表中的数据时，如果会使子表中的外键违反引用完整性，该动作将被禁止执行。不过在某些条件下，可出现暂时的，但在数据的最终状态中，不能违反外键的引用完整性。
+cascade: 当父表中被引用列的数据被更新或删除时，子表中的相应的数据也被更新或删除。
+restrict:与no action规则基本相同，只是引用列中的数据永远不能违反外键的引用完整性，暂时的也不行。
+set null:当父表数据被更新或删除时，子表中的相应数据被设置成Null值，前提是子表中的相应列允许null值。
+set default:当父表数据被更新或删除时,子表中的数据被设置成默认值。前提是子表中的相应列设置有默认值。
+(5) check（校验）约束：用来检查字段值所允许的范围。DBMS每当执行delete,insert或update语句时，都对这个约束过滤。如果为true，则执行。否则，取消执行并提示错误。
+列定义语法如下：
+Column datetype | domain check(search condition)
+表约束语法如下：
+constraint constraint_name check(search condition)
+实例如下：
+create table Emp_Sal
+(
+emp_id int , account CHAR(4) ,salary DECIMAL(5,1),
+constraint validsal check(salary >=1000 and salary<=10000)
+)
+如果此时，再往表中插入如下语句则会出错：(因为不满足salary大于等于1000的约束。)
+insert into Emp_Sal values(8,'12324343',800.0)
+二、 域约束：(sqlserver 不支持)
+语法如下：
+create domain domain_name as data type
+[default default_value]
+[constraint constraint_name] check(value condition expression)
+例如：
+create domain valid_no as int
+constraint constraint_no check(value between 100 and 999)
+然后创建表时，使用valid_no域。
+create table TestDomain
+(
+emp_id valid_no,
+emp_name varchar(10),
+)
+三、断言约束：不必与特定的列绑定，可以理解为能应用于多个表的check约束，因此必须在表定义之外独立创建断言。
+语法如下：
+create assertion constraint_name
+check search condition
+例如：
+create assertion name
+check (Emp_Sal.emp_id in(select emp_id from EmployeeInfo where emp_name is not null)
+添加断言后，每当试图添加或修改Emp_Sal表中的数据时，就对断言中的搜索条件求值，如果为false，则取消执行，给出提示
+词条标签：
+科学 ， 学科
+ 
+数据完整性约束图册
+V百科往期回顾
+  
+  
+词条统计
+浏览次数：60047次
+编辑次数：12次历史版本
+最近更新：Y永不忘R（2018-01-08）
+1 定义
+2 数据完整性约束：
+新手上路
+成长任务编辑入门编辑规则本人编辑new
+我有疑问
+我要质疑在线客服参加讨论意见反馈
+投诉建议
+举报不良信息未通过词条申诉投诉侵权信息封禁查询与解封
+©2018 Baidu 使用百度前必读 | 百科协议 | 隐私政策 | 百度百科合作平台 | 京ICP证030173号 
+京公网安备11000002000001号
+
+  
+
+数据完整性约束
+进入词条
+编辑收藏赞极限潜水员
+分享
+
